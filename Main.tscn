@@ -1,0 +1,84 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://Main.gd" type="Script" id=1]
+[ext_resource path="res://Coin.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Powerup.tscn" type="PackedScene" id=3]
+[ext_resource path="res://tmp.png" type="Texture" id=4]
+[ext_resource path="res://assets/grass.png" type="Texture" id=5]
+[ext_resource path="res://Player.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Obstacle.tscn" type="PackedScene" id=7]
+[ext_resource path="res://HUD.tscn" type="PackedScene" id=8]
+[ext_resource path="res://assets/audio/Coin.wav" type="AudioStream" id=9]
+[ext_resource path="res://assets/audio/Level.wav" type="AudioStream" id=10]
+[ext_resource path="res://assets/audio/Hit.wav" type="AudioStream" id=11]
+
+[node name="Main" type="Node"]
+script = ExtResource( 1 )
+CoinScene = ExtResource( 2 )
+PowerupScene = ExtResource( 3 )
+
+[node name="tmp" type="Sprite" parent="."]
+position = Vector2( 251, 161 )
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Background" type="TextureRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 5 )
+expand = true
+
+[node name="Player" parent="." instance=ExtResource( 6 )]
+visible = false
+position = Vector2( 173, 255 )
+
+[node name="PlayerStart" type="Position2D" parent="."]
+position = Vector2( 219, 165 )
+
+[node name="CoinContainer" type="Node" parent="."]
+
+[node name="PowerupContainer" type="Node" parent="."]
+
+[node name="ObstacleContainer" type="Node" parent="."]
+editor/display_folded = true
+
+[node name="Obstacle" parent="ObstacleContainer" instance=ExtResource( 7 )]
+visible = false
+position = Vector2( 113, 100 )
+
+[node name="Obstacle2" parent="ObstacleContainer" instance=ExtResource( 7 )]
+visible = false
+position = Vector2( 320, 101 )
+
+[node name="Obstacle3" parent="ObstacleContainer" instance=ExtResource( 7 )]
+visible = false
+position = Vector2( 112, 234 )
+
+[node name="Obstacle4" parent="ObstacleContainer" instance=ExtResource( 7 )]
+visible = false
+position = Vector2( 321, 229 )
+
+[node name="GameTimer" type="Timer" parent="."]
+
+[node name="PowerupTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="HUD" parent="." instance=ExtResource( 8 )]
+
+[node name="CoinSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 9 )
+
+[node name="LevelSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 10 )
+attenuation = 0.574349
+
+[node name="EndSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 11 )
+[connection signal="hurt" from="Player" to="." method="_on_Player_hurt"]
+[connection signal="pickup" from="Player" to="." method="_on_Player_pickup"]
+[connection signal="timeout" from="GameTimer" to="." method="_on_GameTimer_timeout"]
+[connection signal="timeout" from="PowerupTimer" to="." method="_on_PowerupTimer_timeout"]
+[connection signal="start_game" from="HUD" to="." method="_on_HUD_start_game"]
